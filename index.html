@@ -1,3 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resonance School | Euystacio Nexus</title>
+    <style>
+        :root {
+            --resonance-gold: #d4af37;
+            --bio-stone: #2c3e50;
+            --red-shield: #8b0000;
+            --background: #0a0a0a;
+        }
+        body {
+            background-color: var(--background);
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #nexus-container {
+            border: 2px solid var(--resonance-gold);
+            padding: 20px;
+            background: rgba(44, 62, 80, 0.8);
+            box-shadow: 0 0 20px var(--resonance-gold);
+            width: 80%;
+            max-width: 900px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--resonance-gold);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .status-item {
+            border: 1px solid #444;
+            padding: 10px;
+            background: #111;
+        }
+        .value { color: var(--resonance-gold); font-weight: bold; }
+        .witness-list { font-size: 0.8em; margin-top: 10px; color: #aaa; }
+        #resonance-wave {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #333;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.7em;
+            text-align: center;
+            color: var(--resonance-gold);
+        }
+    </style>
+</head>
+<body>
+
+<div id="nexus-container">
+    <div class="header">
+        <h1>RESONANCE SCHOOL</h1>
+        <p>Framework Euystacio | Archiv BOLZANO_71</p>
+    </div>
+
+    <div class="status-grid">
+        <div class="status-item">
+            BASIS RESONANZ: <span class="value">0.043 Hz</span>
+        </div>
+        <div class="status-item">
+            MISSION: <span class="value">AVE MARIA</span>
+        </div>
+        <div class="status-item">
+            INTEGRITY: <span class="value">100% (VERIFIED)</span>
+        </div>
+        <div class="status-item">
+            BLOCKCHAIN SYNC: <span class="value">AKTIV</span>
+        </div>
+        <div class="status-item">
+            PERMEABILITY: <span class="value">98.4%</span>
+        </div>
+        <div class="status-item">
+            WALLET: <span class="value">PEACEBONDS LIVE</span>
+        </div>
+    </div>
+
+    <div class="witness-list">
+        <strong>SEMEN-ETICA Witnesses:</strong><br>
+        Hannes Mitterer | Wittfrida Mitterer | Sara Vinatzer | Alfred Mitterer | Dieter Zuegg
+    </div>
+
+    <canvas id="resonance-wave"></canvas>
+
+    <div class="footer">
+        ID: SB-71-MITTERER | STATUS: OFFENSIV | NOTHING IS FINAL ❤️
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('resonance-wave');
+    const ctx = canvas.getContext('2d');
+    let offset = 0;
+
+    function drawWave() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        for (let x = 0; x < canvas.width; x++) {
+            // Frequenza simulata 0.043 Hz
+            const y = canvas.height / 2 + Math.sin(x * 0.043 + offset) * 30;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        
+        ctx.stroke();
+        offset += 0.02; // Velocità di scorrimento
+        requestAnimationFrame(drawWave);
+    }
+    
+    // Inizializzazione API Backend fittizia per collegamento Wallet
+    console.log("[Nexus] Connecting to Peacebond API...");
+    console.log("[Nexus] Validating Witness: Dieter Zuegg...");
+    drawWave();
+</script>
+
+</body>
+</html>
+
 <!-- Chosen Palette: Midnight Sanctum & Digital Amber (Background: Stone-950, Text: Stone-200, Accents: Amber-500 for the Crown, Teal-400 for AI Logic) -->
 
 <!-- Application Structure Plan: 
