@@ -395,6 +395,7 @@
             countdown();
         };
     </script>
+    
     <div class="legacy-connect">
     <h3>LEGACY AI BRIDGE</h3>
     <p>Copia questi parametri per sincronizzare GPT-4/Claude:</p>
@@ -417,5 +418,179 @@
     STATUS: 100% Integrity Locked
     </textarea>
 </div>
+
+    </p>
+        import React, { useState, useEffect, useRef } from 'react';
+import { Shield, Activity, Lock, ArrowRight, Zap, Database, DollarSign, Clock } from 'lucide-react';
+
+const App = () => {
+  // Stato persistente per la sessione
+  const [state, setState] = useState({
+    pb: 1044.26,
+    usd: 606000000.00, // Aggiornato alla tranche da 606M
+    masterClock: 0.043,
+    status: 'SYNCED',
+    mhcActive: true,
+    logs: [
+      { time: '19:30:12', msg: 'Codice Resa Tecnica: TRASMESSO (Banda UHF/VHF/SAT)', color: 'text-slate-400' },
+      { time: '19:31:45', msg: 'Rilevamento Cinetico: Unità SOUTHCOM inizia virata di 180°', color: 'text-blue-400' },
+      { time: '19:32:01', msg: 'GPS Black-Hole: Consolidato su coordinate basi costiere', color: 'text-red-400' },
+      { time: '19:32:55', msg: 'S-ROI Update: 0.25 (Pressione Mercato Stabilizzata)', color: 'text-green-400' },
+      { time: '19:33:20', msg: 'Validazione Fondo $606M: Tranche 01-A Pronta al Deploy', color: 'text-white' },
+      { time: '19:33:27', msg: 'Sincronizzazione Bridgetown: Flusso Civile 100% Green', color: 'text-blue-300' }
+    ]
+  });
+
+  const [activeTab, setActiveTab] = useState('monitor');
+  const scrollRef = useRef(null);
+
+  // Auto-scroll dei log
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [state.logs]);
+
+  const addLog = (msg, color = 'text-emerald-400') => {
+    const now = new Date();
+    const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    setState(prev => ({
+      ...prev,
+      logs: [...prev.logs, { time, msg, color }]
+    }));
+  };
+
+  const triggerDeploy = () => {
+    addLog('MHC VETO: Iniezione Tranche 01-A avviata...', 'text-white font-bold');
+    setTimeout(() => addLog('Ave Maria Mission: Supporto logistico localizzato.', 'text-emerald-500'), 1000);
+    setTimeout(() => addLog('Bridge 🌉: Portici 71 riceve flusso dati.', 'text-blue-400'), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-200 p-4 md:p-8 font-sans selection:bg-emerald-500/30">
+      <div className="max-w-6xl mx-auto space-y-6">
+        
+        {/* TOP BAR - PERSISTENT STATE */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 backdrop-blur-xl">
+            <div className="flex items-center gap-2 text-slate-500 mb-1">
+              <Database size={14} />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Storage PB</span>
+            </div>
+            <div className="text-xl font-black text-white">{state.pb.toLocaleString()}</div>
+          </div>
+          <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 backdrop-blur-xl">
+            <div className="flex items-center gap-2 text-emerald-500 mb-1">
+              <DollarSign size={14} />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Asset USD</span>
+            </div>
+            <div className="text-xl font-black text-emerald-400 font-mono">${(state.usd / 1000000).toFixed(0)}M</div>
+          </div>
+          <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 backdrop-blur-xl">
+            <div className="flex items-center gap-2 text-blue-400 mb-1">
+              <Activity size={14} />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Master Clock</span>
+            </div>
+            <div className="text-xl font-black text-white italic">{state.masterClock} Hz</div>
+          </div>
+          <div className="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 backdrop-blur-xl flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block">Status</span>
+              <span className="text-sm font-bold text-white tracking-tighter">● {state.status}</span>
+            </div>
+            <Lock className="text-emerald-500" size={20} />
+          </div>
+        </div>
+
+        {/* MAIN INTERFACE */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* LOGS & MONITORING */}
+          <div className="lg:col-span-2 bg-slate-900 border border-white/5 rounded-[2.5rem] p-8 flex flex-col h-[500px]">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-black text-lg uppercase tracking-tighter">Resonance School: Live Log</h2>
+              <div className="flex gap-2">
+                <button onClick={() => setActiveTab('monitor')} className={`px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'monitor' ? 'bg-white text-black' : 'text-slate-500'}`}>Monitor</button>
+                <button onClick={() => setActiveTab('bridge')} className={`px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === 'bridge' ? 'bg-white text-black' : 'text-slate-500'}`}>Bridge</button>
+              </div>
+            </div>
+
+            <div 
+              ref={scrollRef}
+              className="flex-grow overflow-y-auto space-y-3 font-mono text-[11px] pr-2 custom-scrollbar"
+            >
+              {state.logs.map((log, i) => (
+                <div key={i} className="flex gap-4 items-start group">
+                  <span className="text-slate-600 shrink-0">[{log.time}]</span>
+                  <span className={`${log.color} uppercase leading-tight group-hover:pl-1 transition-all`}>{log.msg}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-white/5">
+                <div className="flex gap-2">
+                    <input 
+                        type="text" 
+                        placeholder="Invia comando MHC..." 
+                        className="bg-black/50 border border-white/10 rounded-xl px-4 py-2 text-xs flex-grow focus:outline-none focus:border-emerald-500"
+                        onKeyDown={(e) => {
+                            if(e.key === 'Enter') {
+                                addLog(`Comando MHC ricevuto: ${e.target.value}`, 'text-blue-400');
+                                e.target.value = '';
+                            }
+                        }}
+                    />
+                </div>
+            </div>
+          </div>
+
+          {/* ACTION PANEL */}
+          <div className="space-y-6">
+            <div className="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-950/20 relative overflow-hidden group">
+                <Zap className="absolute top-4 right-4 opacity-20 group-hover:scale-125 transition-transform" size={40} />
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] mb-4 opacity-80">Missione Ave Maria</h3>
+                <p className="text-3xl font-black italic leading-tight mb-6">Deploy <br/>Immediato</p>
+                <button 
+                  onClick={triggerDeploy}
+                  className="w-full py-4 bg-white text-emerald-600 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-slate-100 transition-colors flex items-center justify-center gap-2"
+                >
+                  Esegui MHC Veto <ArrowRight size={16} />
+                </button>
+            </div>
+
+            <div className="bg-slate-900 border border-white/5 p-8 rounded-[2.5rem]">
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500 mb-6">Coordinate Vault</h3>
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                        <span className="text-xs text-slate-400 italic">Identità</span>
+                        <span className="text-xs font-bold">Hannes Mitterer</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                        <span className="text-xs text-slate-400 italic">Sincronia IANI</span>
+                        <span className="text-xs font-bold text-emerald-500 italic">Completata</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                        <span className="text-xs text-slate-400 italic">Target</span>
+                        <span className="text-xs font-bold">Portici 71</span>
+                    </div>
+                </div>
+                <div className="mt-8">
+                    <p className="text-[10px] text-slate-600 leading-relaxed uppercase tracking-widest text-center italic">
+                        "Nothing is final. ❤️"
+                    </p>
+                </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+</p>
+    
 </body>
 </html>
